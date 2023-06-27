@@ -1,0 +1,338 @@
+﻿<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>盆底肌肉康复器</title>
+</head>
+<body>
+<div id = "header">
+    <div class="bgc">
+        <p class="p1"><a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd4a2fb32a5fbcac2&redirect_uri=http%3A%2F%2Fwww.faxianlishi.com%2Fdevice%2Fproduct%3Fdev_type%3DButtocks&response_type=code&scope=SCOPE&state=STATE#wechat_redirect">盆底修复</a></p>
+    </div>
+{#    <input type="button" onclick="SaveData([1900,1.3,1])" value="button">Test</input>#}
+</div>
+
+<div id="box_lida">
+    <div id="main"></div>
+</div>
+
+<div class="box_table">
+
+    <table border="1" style="margin-top: -150px;">
+        <th>压力(Pa)</th>
+        <th>持久(s)</th>
+        <th>次数(N)</th>
+        <tr>
+            <td id="td-pressure">--</td>
+            <td id="td-lasting">--</td>
+            <td id="td-count">--</td>
+        </tr>
+    </table>
+</div>
+
+<div id="box_zx">
+</div>
+</body>
+<script type="text/javascript" src="{% static 'device/js/apis/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'device/js/apis/jweixin-1.0.0.js' %}"></script>
+<script type="text/javascript" src="{% static 'device/js/base64.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/pendi.js' %}"></script>
+
+<script type="text/javascript">
+    var m_dataCache = "";
+    var m_nMoveNumber = 0;
+    var m_nCurMoveNumber = 0;
+
+    var openid = "{{ openid }}";
+
+    function CharToHex3(str) {
+        var out, i, h;
+        out = "";
+        i = 0;
+        while(i < str.length)
+        {
+            if(i==str.length-1){
+                h = str.charCodeAt(i++).toString(16);
+                if(h.length  ==1)
+                    h = "0" + h;
+                out += h;
+            }else{
+                h = str.charCodeAt(i++).toString(16);
+                if(h.length  ==1)
+                    h = "0" + h;
+                out += h;
+            }
+        }
+        return out;
+    }
+
+    function SaveData(arg) {
+        $.ajax({
+            type: "POST",
+            url: "/device/product",
+            dataType: "text",
+            data: {"Openid":openid,"Pree":arg[0],"Time":arg[1],"Count":arg[2]},
+            success: function(arg){
+                console.log("save success!");
+            },
+            error:function (arg) {
+                console.log("save error!");
+            },
+        });
+    }
+
+    function ParsePDData(data) {
+        //这里有4个字节，第一个表示时间
+        var strTimeData = data.substr(0,2);
+        var strFlagData = data.substr(2,2);
+        var strData = data.substr(4,4);
+
+        var fTimeData = parseInt(strTimeData,16)*50/1000.0; //单位秒
+        var nFlagData = parseInt(strFlagData,16);
+        var nData = parseInt(strData,16);
+        if(0x00000001 == (0x00000001&nFlagData)){
+            var nDataTemp = -nData;
+            nData = nDataTemp;
+        }
+
+        //更新界面
+        fTimeData = fTimeData.toFixed(1);
+        m_nMoveNumber++;
+        m_nCurMoveNumber++;
+
+        $("#td-pressure").html(nData);
+        $("#td-lasting").html(fTimeData);
+        $("#td-count").html(m_nMoveNumber);
+        var dataSave = [nData,fTimeData,m_nMoveNumber];
+
+        if (10000 < nData){
+            nData = 10000;
+        }
+        if(100 < m_nCurMoveNumber){
+            m_nCurMoveNumber = 0;
+        }
+        dataLida = [nData,fTimeData,m_nCurMoveNumber];
+        refreshDataLida(dataLida);
+
+        SaveData(dataSave);
+    }
+
+    function ParsePDFrame() {
+
+        var nPosFrom = m_dataCache.indexOf("FEAA"); // 基于0开始,找不到返回-1
+        if(-1 == nPosFrom){
+            //如果连帧头都找不到，所有数据都是无效的。
+            m_dataCache = "";
+            return;
+        }
+
+        var EffcDataLen = m_dataCache.length - nPosFrom;
+        if(16 > EffcDataLen){
+            if (0 < nPosFrom){
+                var strTemp = m_dataCache.substr(nPosFrom);
+                m_dataCache = strTemp;
+            }
+
+            return;
+        }
+
+        var nPosTo = m_dataCache.indexOf("EEFD");
+        if(-1 == nPosTo){
+            //这个数据头帧错误，放弃该帧头
+            var strTemp = m_dataCache.substr(nPosFrom+4);
+            m_dataCache = strTemp;
+            ParsePDFrame();
+            return;
+        }
+
+        if(12 != nPosTo-nPosFrom) {
+            //这个数据帧长度错误，放弃帧尾
+            var strTemp = m_dataCache.substr(nPosTo+4);
+            m_dataCache = strTemp;
+            ParsePDFrame();
+            return;
+        }
+
+        //经过以上的校验了，后面就是处理正常的数据帧
+        //首先把要处理的数据获取到
+        var EffcOneData = m_dataCache.substring(nPosFrom+4,nPosTo);
+        ParsePDData(EffcOneData);
+
+        //处理了的数据的帧要删除
+        var strTemp = m_dataCache.substr(nPosTo+4);
+        m_dataCache = strTemp;
+
+        //递归调用
+        ParsePDFrame();
+    }
+    
+    function ParsePDPakage(data16) {
+        var dataTemp = m_dataCache;
+        m_dataCache = dataTemp.concat(data16.toUpperCase());
+        ParsePDFrame();
+    }
+    
+    {% block javascript %}
+        var device_id = "{{ device_id }}";
+        //下面的是买的设备的device_id
+        var origin_id = "{{ origin_id }}";
+        wx.config({
+            beta: true,                  //坑：这个很重要，必须配置这个为true,才能调用微信的硬件API
+            debug: false,               //是否开启调试模式，会自动弹一些消息框显示微信返回的数据
+{#            debug: true,#}
+            appId: "{{ app_id }}",        //让后台返回appid
+            timestamp: {{ time_stamp }},          //让后台返回生成证书时用的时间戳
+            nonceStr: "{{ nonce_str }}",        //让后台返回生成证书时用的随机串
+            signature: "{{ signature }}",            //让后台返回已当前URL地址生成的证书
+
+            jsApiList: [ //需要调用的接口，都得在这里面写一遍
+                "openWXDeviceLib",//初始化设备库（只支持蓝牙设备）
+                "closeWXDeviceLib",//关闭设备库（只支持蓝牙设备）
+                "getWXDeviceInfos",//获取设备信息（获取当前用户已绑定的蓝牙设备列表）
+                "sendDataToWXDevice",//发送数据给设备
+                "startScanWXDevice",//扫描设备（获取周围所有的设备列表，无论绑定还是未被绑定的设备都会扫描到）
+                "stopScanWXDevice",//停止扫描设备
+                "connectWXDevice",//连接设备
+                "disconnectWXDevice",//断开设备连接
+                "getWXDeviceTicket",//获取操作凭证
+
+                "onWXDeviceBindStateChange",//微信客户端设备绑定状态被改变时触发此事件
+                "onWXDeviceStateChange",//监听连接状态，可以监听连接中、连接上、连接断开
+                "onReceiveDataFromWXDevice",//接收到来自设备的数据时触发
+                "onScanWXDeviceResult",//扫描到某个设备时触发
+                "onWXDeviceBluetoothStateChange",//手机蓝牙打开或关闭时触发
+            ]
+        });
+
+        function append_msg(msg){
+            $("#information").append("<p>" + msg + "</p>");
+            console.log(msg);
+{#            alert(msg);#}
+        }
+
+        function begin_scan() {
+            wx.invoke('startScanWXDevice', {'btVersion': 'ble'}, function (res) {
+                append_msg("begin scan：" + res.err_msg);
+            });
+        }
+
+        function stop_scan() {
+            wx.invoke('stopScanWXDevice', {}, function (res) {
+                append_msg("stop scan：" + res.err_msg);
+            });
+        }
+
+        function connect() {
+            wx.invoke('connectWXDevice', {'deviceId': device_id}, function (res) {
+                append_msg(JSON.stringify(res));
+            });
+        }
+
+        function disconnect() {
+            wx.invoke('disconnectWXDevice', {'deviceId': device_id}, function (res) {
+                append_msg(JSON.stringify(res));
+            });
+        }
+
+        function get_device_info() {
+            wx.invoke('getWXDeviceInfos', {}, function (res) {
+                $("#information").append("get my devices:" + res.err_msg);
+                alert(JSON.stringify(res));
+            });
+        }
+
+        function bind_device() {
+            wx.invoke('getWXDeviceTicket', {"deviceId": device_id, "type": 1}, function (res) {
+                if (res.err_msg != "getWXDeviceTicket:ok") {
+                    append_msg("bind failed");
+                    return;
+                } else {
+                    append_msg("bind ok");
+                }
+            });
+        }
+
+        function unbind_device() {
+            wx.invoke('getWXDeviceTicket', {"deviceId": device_id, "type": 2}, function (res) {
+                if (res.err_msg != "getWXDeviceTicket:ok") {
+                    append_msg("unbind failed");
+                    return;
+                } else {
+                    append_msg("unbind ok");
+                }
+            });
+        }
+
+        function send_data(data) {
+            wx.invoke('sendDataToWXDevice', {'deviceId': device_id, "base64Data": base64encode(data)}, function (res) {
+                if (res.err_msg == "sendDataToWXDevice:ok") {
+                    append_msg("send ok");
+                } else {
+                    append_msg("send failed");
+                }
+            });
+        }
+
+
+        wx.ready(function () {
+            //初始化设备库 需填写参数 公众号的原始ID
+            wx.invoke('openWXDeviceLib', {'brandUserName': origin_id}, function (res) {
+                append_msg(JSON.stringify(res));
+            });
+
+            wx.on('onScanWXDeviceResult', function (res) {
+                var macid = JSON.stringify(res.devices[0].deviceId).replace(/\"/g, "");
+                append_msg("scan:" + macid);
+            });
+
+            //手机蓝牙状态改变时触发 （这是监听事件的调用方法，注意，监听事件都没有参数）
+            wx.on('onWXDeviceBluetoothStateChange', function (res) {
+                append_msg(JSON.stringify(res));
+            });
+
+            //设备绑定状态改变事件（解绑成功，绑定成功的瞬间，会触发）
+            wx.on('onWXDeviceBindStateChange', function (res) {
+                append_msg(JSON.stringify(res));
+            });
+
+            //设备连接状态改变
+            wx.on('onWXDeviceStateChange', function (res) {
+                append_msg(JSON.stringify(res));
+            });
+
+            //接收到设备传来的数据
+            wx.on('onReceiveDataFromWXDevice', function (res) {
+                var data16 = CharToHex3(base64decode(res.base64Data));
+{#                alert("data16:"+data16);#}
+                if(2 > data16.length){
+                    return;
+                }
+                ParsePDPakage(data16);
+            });
+        });
+        var PressDate = [];
+        var Press = [];
+        var PressTime = [];
+        var PressCount = [];
+        {% for item1 in PressDate %}
+            PressDate.push("{{ item1 }}");
+        {% endfor %}
+        {% for item2 in Press %}
+            Press.push({{ item2 }});
+        {% endfor %}
+        {% for item3 in PressTime %}
+            PressTime.push({{ item3 }});
+        {% endfor %}
+        {% for item4 in PressCount %}
+            PressCount.push({{ item4 }});
+        {% endfor %}
+        refreshDataZx(PressDate,Press,PressTime,PressCount);
+    {% endblock %}
+</script>
+</html>

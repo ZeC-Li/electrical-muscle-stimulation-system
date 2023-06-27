@@ -1,0 +1,74 @@
+@charset "utf-8";
+body { font: 12px 'Microsoft Yahei'; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+a { text-decoration: none; }
+a:active,
+a:hover,
+a:focus,
+input,
+textarea,
+select { outline: none; }
+body {margin:0; padding: 0; list-style: none;}
+ul,
+li,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+dl,
+dt,
+dd,
+article,
+header,
+footer,
+section { margin: 0; padding: 0; list-style: none; }
+.clear:after,
+.fl-li:after,
+.fl-a:after,
+.fl-div:after { content: ''; display: table; visibility: hidden; clear: both; }
+img { display: block; width: 128px; height: auto; }
+.l,
+.fl-li li,
+.fl-a a,
+.fl-div div { float: left; }
+.r { float: right; }
+.dib,
+.dib-a a,
+.dib-span span { display: inline-block; }
+.db,
+.db-a a,
+.db-span span { display: block; }
+.dn { display: none; }
+.w100p { width: 100%; }
+.w110p { width: 110%; }
+.oh { overflow: hidden; }
+.por,
+div,
+li,
+header,
+footer,
+section,
+a,
+p,
+article,
+h1,
+h2,
+h3,
+dl,
+dt,
+dd {
+	position: relative;
+}
+div {
+	display:　block;
+}
+.poa { position: absolute; }
+.pof { position: fixed; }
+input.reset,
+select.reset,
+textarea.reset,
+button.reset { -webkit-appearance: none; -moz-appearance: none; -ms-appearance: none; appearance: none; border-radius: 0; margin: 0; padding: 0; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; -ms-box-sizing: content-box; box-sizing: content-box; border: none; background: none; }
+.mobile { max-width: 480px; min-width: 320px; margin: 0 auto; }
+a img { border: none; }

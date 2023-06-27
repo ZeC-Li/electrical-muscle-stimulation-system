@@ -1,0 +1,165 @@
+@charset "utf-8";
+
+body,div{
+    margin: 0;
+    padding: 0;
+    font-family: "微软雅黑";
+}
+body div p{
+    margin: 0;
+    padding:0;
+}
+
+#header {
+    height:50px;
+    width:100%;
+    top: 0;
+    left: 0;
+    margin-top: 5px;
+}
+#header .bgc {
+    background-color: #FF00FF;
+    opacity: 0.54;
+    height:45px;
+    width:100%;
+    margin-top: auto;
+}
+#header .p1 {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 45px;
+}
+
+.box_img{
+    margin: 0;
+    padding: 0;
+}
+
+.box_img img{
+    max-width: 100%;
+}
+
+.box_table table{
+    text-align: center;
+    background-color: #FF3366;
+    opacity:0.54;
+    color:white;
+    width: 90%;
+    height: 150px;
+    font-size: 20px;
+    border-color: grey;
+    border-spacing:0px;
+}
+
+.box_table table th {
+    height:50%;
+}
+
+.box_table table td {
+    background-color: silver;
+    color:black;
+}
+
+.box_table{
+    width: 100%;
+}
+
+.box_table table{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    align: center;
+}
+
+
+.box_button{
+    float: right;
+    margin-top: 10px;
+}
+.a_demo_four {
+	background-color:#FF00FF;
+	font-family: 'Open Sans', sans-serif;
+	font-size:14px;
+	text-decoration:none;
+	color:#fff;
+	position:relative;
+	padding:10px 20px;
+	padding-right:50px;
+    margin-right: 10px;
+	background-image: linear-gradient(bottom, rgb(240,0,202) 0%, rgb(250,184,229) 100%);
+	background-image: -o-linear-gradient(bottom, rgb(240,0,202) 0%, rgb(250,184,229) 100%);
+	background-image: -moz-linear-gradient(bottom, rgb(240,0,202) 0%, rgb(250,184,229) 100%);
+	background-image: -webkit-linear-gradient(bottom, rgb(240,0,202) 0%, rgb(250,184,229) 100%);
+	background-image: -ms-linear-gradient(bottom, rgb(240,0,202) 0%, rgb(250,184,229) 100%);
+	background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0, rgb(240,0,202)),
+	color-stop(1, rgb(240,184,229))
+	);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0px 1px 0px #FF00FF, 0px 5px 0px 0px #DC143C, 0px 10px 5px #EEAEEE;
+	-moz-box-shadow: inset 0px 1px 0px #FF00FF, 0px 5px 0px 0px #DC143C, 0px 10px 5px #EEAEEE;
+	-o-box-shadow: inset 0px 1px 0px #FF00FF, 0px 5px 0px 0px #DC143C, 0px 10px 5px #EEAEEE;
+	box-shadow: inset 0px 1px 0px #FF00FF, 0px 5px 0px 0px #DC143C, 0px 10px 5px #EEAEEE;
+}
+
+.a_demo_four:active {
+	top:3px;
+	background-image: linear-gradient(bottom, rgb(250,0,229) 0%, rgb(250,160,202) 100%);
+	background-image: -o-linear-gradient(bottom, rgb(250,0,229) 0%, rgb(250,160,202) 100%);
+	background-image: -moz-linear-gradient(bottom, rgb(250,0,229) 0%, rgb(250,160,202) 100%);
+	background-image: -webkit-linear-gradient(bottom, rgb(250,0,229) 0%, rgb(250,160,202) 100%);
+	background-image: -ms-linear-gradient(bottom, rgb(250,0,229) 0%, rgb(250,160,202) 100%);
+	background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0, rgb(250,0,229)),
+	color-stop(1, rgb(250,160,202))
+	);
+	-webkit-box-shadow: inset 0px 1px 0px #FF00FF, 0px 2px 0px 0px #DC143C, 0px 5px 3px #EEAEEE;
+	-moz-box-shadow: inset 0px 1px 0px #FF00FF, 0px 2px 0px 0px #DC143C, 0px 5px 3px #EEAEEE;
+	-o-box-shadow: inset 0px 1px 0px #FF00FF, 0px 2px 0px 0px #DC143C, 0px 5px 3px #EEAEEE;
+	box-shadow: inset 0px 1px 0px #FF00FF, 0px 2px 0px 0px #DC143C, 0px 5px 3px #EEAEEE;
+}
+
+.a_demo_four::before {
+	background-color:rgb(250,0,202);
+	background-image:url(../img/right_arrow.png);
+	background-repeat:no-repeat;
+	background-position:center center;
+	content:"";
+	width:20px;
+	height:20px;
+	position:absolute;
+	right:15px;
+	top:50%;
+	margin-top:-9px;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-o-border-radius: 50%;
+	border-radius: 50%;
+	-webkit-box-shadow: inset 0px 1px 0px #DC143C, 0px 1px 0px #FF00FF;
+	-moz-box-shadow: inset 0px 1px 0px #DC143C, 0px 1px 0px #FF00FF;
+	-o-box-shadow: inset 0px 1px 0px #DC143C, 0px 1px 0px #FF00FF;
+	box-shadow: inset 0px 1px 0px #DC143C, 0px 1px 0px #FF00FF;
+}
+
+.a_demo_four:active::before {
+	top:50%;
+	margin-top:-12px;
+	-webkit-box-shadow: inset 0px 1px 0px #FF00FF, 0px 3px 0px #DC143C, 0px 6px 3px #EEAEEE;
+	-moz-box-shadow: inset 0px 1px 0px #FF00FF, 0px 3px 0px #DC143C, 0px 6px 3px #EEAEEE;
+	-o-box-shadow: inset 0px 1px 0px #FF00FF, 0px 3px 0px #DC143C, 0px 6px 3px #EEAEEE;
+	box-shadow: inset 0px 1px 0px #FF00FF, 0px 3px 0px #DC143C, 0px 6px 3px #EEAEEE;
+}

@@ -1,0 +1,1 @@
+default_app_config='B24DMaternityExerciseApp.apps.B24DmaternityexerciseappConfig'

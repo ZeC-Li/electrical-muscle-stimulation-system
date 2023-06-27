@@ -1,0 +1,38 @@
+{% extends "device/base.html" %}
+
+
+{% block title %}
+    蓝牙开关灯
+{% endblock %}
+
+
+{% block ext_file %}
+    {{ block.super }}
+    <script src="{{ STATIC_URL }}js/apis/jquery.js"></script>
+    <script src="{{ STATIC_URL }}js/apis/jweixin-1.0.0.js"></script>
+    <script src="{{ STATIC_URL }}js/base64.js"></script>
+{% endblock %}
+
+{% block body %}
+{#<button class="weui_btn_primary" onclick="begin_scan()">开始扫描</button>#}
+{#<button class="weui_btn_primary" onclick="stop_scan()">停止扫描</button>#}
+{#<button class="weui_btn_primary" onclick="connect()">连接设备</button>#}
+{#<button class="weui_btn_primary" onclick="disconnect()">断开设备</button>#}
+{#<button class="weui_btn_primary" onclick="get_device_info()">设备信息</button>#}
+{#<button class="weui_btn_primary" onclick="bind_device()">绑定设备</button>#}
+{#<button class="weui_btn_primary" onclick="unbind_device()">解绑设备</button>#}
+{#<button class="weui_btn_primary" onclick="send_data()">发送数据</button>#}
+
+    <br/>
+    <a href="#" onclick="send_data('1')"
+       class="weui_btn weui_btn_primary">开灯</a>
+
+    <a href="#" onclick="send_data('0')"
+       class="weui_btn weui_btn_primary">关灯</a>
+
+    <br/>
+    <div id="information" style="width: 100%; border: solid 1px">
+
+    </div>
+
+{% endblock %}

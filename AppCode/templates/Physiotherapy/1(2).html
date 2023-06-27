@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+
+    {#    调试自动清理浏览器缓存#}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <link rel="stylesheet" href="{% static 'MaternityExercise/css/yunchancao.css' %}">
+<html>
+<head>
+    <title>理疗仪</title>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.0/dist/echarts.min.js"></script>
+    <script type="text/javascript" src="{% static 'device/js/apis/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'device/js/apis/jweixin-1.0.0.js' %}"></script>
+    <script type="text/javascript" src="{% static 'device/js/base64.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
+    <script type="text/javascript">
+        var openid = "{{ openid }}";
+        var app_id= "{{ app_id }}";
+        var time_stamp= "{{ time_stamp }}";
+        var nonce_str= "{{ nonce_str }}";
+        var signature= "{{ signature }}";
+        var device_id = "{{ device_id }}";
+        //下面的是买的设备的device_id
+        var origin_id = "{{ origin_id }}";
+
+        var OptDateCache = [];
+        var OptDataCache = [];
+        {% for item1 in OptDate %}
+            OptDateCache.push("{{ item1 }}");
+        {% endfor %}
+
+        {% for item2 in OptData %}
+            OptDataCache.push("{{ item2 }}");
+        {% endfor %}
+
+</script>
+<script type="text/javascript" src="{% static 'js/weinxin.js' %}"></script>
+<script type="text/javascript" src="{% static 'MaternityExercise/js/yunchancao.js' %}"></script>
+<script type="text/javascript">
+    function OnTestFun() {
+        var temp1 = "FA2030303334382D30333030342D3136343438AAFB2D31343838382030373533322D3030313830AB";
+        var temp2 = "";
+        for (var i = 0 ;i < 100; i++){
+            temp2 += temp1;
+        }
+        DataDeal(temp2);
+    }
+
+    function OnTest1Fun() {
+        var temp1 = "FA203035303030203035303030203030313030AAFB203035303030203035303030203030313030AB";
+        var temp2 = "";
+        for (var i = 0 ;i < 100; i++){
+            temp2 += temp1;
+        }
+        DataDeal(temp2);
+    }
+</script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .section1 {
+            background-color: #4bb8fd;
+            height: 10vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section1 h3 {
+            color: white;
+            text-align: center;
+        }
+
+        .section2 {
+            background-color: white;
+            height: 20vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .section2 .left {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a37861;
+        }
+
+        .section2 .left img {
+            margin-bottom: 10px;
+        }
+
+        .section2 .center {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section2 .right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .section3 {
+            background-color: #f2f2f2;
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section4 {
+            background-color: white;
+            height: 20vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section4 .buttons {
+            display: flex;
+            justify-content: center;
+        }
+
+        .section4 .buttons button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        .section4 .buttons img {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="section1" >
+    <h3 style="font-size: 50px">理疗仪</h3>
+</div>
+
+<div class="section2">
+    <div class="left">
+        <h2 style="font-size: 80px">待机</h2>
+
+
+    </div>
+    <div style="text-align: center;font-size: 50px">
+        理疗时间：
+
+        <br>
+        {{ 00 }}时 {{ 00 }}分 {{ 00 }}秒<br>
+
+        <button style="background-color: #5fb560; color: white;border: none;font-size: 28px;"  >选择设备
+        <select style="background-color: #5fb560; color: white;border: none;font-size: 28px;"  title="选择设备" class="selectpicker form-control"> </select>  </button>
+
+
+    </div>
+    <div class="right">
+        <img style="padding-right: 100px;font-size: 80px;" src="img/dc.png" alt="Battery" width="100" height="200">
+    </div>
+</div>
+
+<div class="section3">
+    <div id="chart" style="width: 800px; height: 800px;" ></div>
+</div>
+
+<div class="section4">
+    <div class="buttons">
+        <div style="padding-right: 100px;">
+            <img src="img/jiahao.png" style="padding-left: 10px;padding-top: 30px" alt="Logo1" width="150" height="150"><br>
+           <div style="padding-top: 18px;text-align: center"> <button style="background-color: #79a8d2; color: white;border: none;position: center" width="200">增加 </button></div>
+
+        </div>
+        <div>
+            <img src="img/mr.png" style="padding-left: 10px;" alt="Logo2" width="200" height="200"><br>
+           <div style="text-align: center"> <button style="background-color: #79a8d2; color: white;border: none;text-align: center" width="200">理疗 ▲</button></div>
+        </div>
+        <div style="padding-left: 100px;">
+            <img src="img/jianhao.png" style="padding-left: 10px;padding-top: 30px" alt="Logo3" width="150" height="150"><br style="padding-top: 48px">
+            <div style="padding-top: 18px;text-align: center">
+                <button style="background-color: #79a8d2; color: white;border: none;" width="200">减少 </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var chart = echarts.init(document.getElementById('chart'));
+    const gaugeData = [
+      {
+        fontSize:200,
+        value:20,
+        name: '强度',
+        title: {
+          offsetCenter: ['0%', '-10%'],
+            fontSize:50,
+        },
+        detail: {
+          valueAnimation: true,
+          offsetCenter: ['0%', '10%'],
+
+        }
+      },
+
+
+    ];
+    option = {
+      series: [
+        {
+          type: 'gauge',
+          startAngle: 90,
+          endAngle: -270,
+          pointer: {
+            show: false
+          },
+          progress: {
+            show: true,
+            overlap: false,
+            roundCap: true,
+            clip: false,
+            itemStyle: {
+              borderWidth: 1,
+              borderColor: '#464646'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              width: 40
+            }
+          },
+          splitLine: {
+            show: false,
+            distance: 0,
+            length: 10
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            show: false,
+            distance: 50
+          },
+          data: gaugeData,
+          title: {
+            fontSize: 14
+          },
+          detail: {
+
+            height: 44,
+            fontSize: 44,
+
+
+            formatter: '{value}%'
+          }
+        }
+      ]
+    };
+
+
+    chart.setOption(option);
+</script>
+</body>
+</html>
