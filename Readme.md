@@ -6,10 +6,11 @@ If you want to use our data or method, please cite our paper.
 2. Binjie Chen: RNN-PID,fuzzy control， SOA-PID，modified RNN
 3. Yapeng Dong：Hardware design, debugging, MCU code development
 4. Chengxiang Wang：Experimentation and data collection
-5. Hao Zhang：Grammar check for the paper
-6. Bo Yang： Project initiation, providing project ideas
-7. Yuqi Tang：Traditional Chinese medicine theory support for the project
-8. Shan Liang：Supervision of papers and projects
+5. Bo Yang： Project initiation, providing project ideas
+6. Jinxi He：Traditional Chinese medicine theory support for the project, Tuina therapy, design of Motions for Tuina
+7. Yong Luo：Project Oversight, Project Support
+8. Qingsong Liu：Project Oversight, Project Support and Procedures Related to Thesis Experiments
+
 
 # acknowledge
 
@@ -17,4 +18,5 @@ In this article, there are also some individuals who have provided assistance to
 
 - Fan Jin ( Maya Diagnostics & Healthcare Co.Ltd.): He helped with hardware debugging and soldering.
 - Zhou Yi (nickname：雨花依雨): He built the backend user service for the Applet
+- Yuqi Tang：Traditional Chinese medicine theory support for the project, design of Motions for Tuina
 
